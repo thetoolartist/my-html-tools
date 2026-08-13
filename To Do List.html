@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Fancy To-Do List</title>
+  <style>
+    /* Reset default styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #fbc2eb, #a6c1ee); /* Soft pink to light purple gradient */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      position: relative;
+    }
+
+    /* Watermark style */
+    .watermark {
+      position: absolute;
+      top: 5%; /* Adjusted to place the watermark towards the top */
+      left: 10%;
+      transform: translateX(-10%); /* Keep it horizontally centered */
+      font-size: 8rem;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ff6a00, #ee0979, #ff8a00); /* Cool gradient for the text */
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      opacity: 0.2; /* Semi-transparent effect */
+      letter-spacing: 15px;
+      text-align: left;
+      z-index: -1; /* Place it behind the content */
+      pointer-events: none; /* Make sure it doesn't block clicks */
+    }
+
+    .todo-container {
+      width: 900px; /* Increased container width to handle larger text */
+      padding: 20px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    .input-group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      background-color: #3a3a3a;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      background-color: #6a11cb;
+    }
+
+    button {
+      padding: 15px;
+      background-color: #2575fc;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1e61d2;
+      transform: scale(1.1);
+    }
+
+    .todo-list {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #333;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      opacity: 0.9;
+      position: relative;
+      animation: slideIn 0.5s ease-out; /* Animation when added */
+      overflow: hidden; /* Prevent content from overflowing */
+    }
+
+    /* Slide-in animation for newly added tasks */
+    @keyframes slideIn {
+      from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    /* Slide-out animation for deleted tasks */
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+
+    .todo-item.delete {
+      animation: slideOut 0.5s forwards; /* Animation when deleted */
+    }
+
+    .todo-item:hover {
+      background-color: #444;
+      opacity: 1;
+    }
+
+    .todo-item button {
+      background-color: #ff5c5c;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      flex-shrink: 0; /* Prevent button from shrinking */
+    }
+
+    .todo-item button:hover {
+      background-color: #e74c3c;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .todo-item span {
+      flex-grow: 1;
+      text-align: left;
+      padding-left: 10px;
+      white-space: nowrap; /* Prevent text from wrapping */
+      overflow: hidden;
+      text-overflow: ellipsis; /* Add ellipsis for long text */
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="watermark">ARUN GAJJAR</div> <!-- Watermark text -->
+
+  <div class="todo-container">
+    <h1>My To-Do List</h1>
+    <div class="input-group">
+      <input type="text" id="todoInput" placeholder="Add a new task...">
+      <button onclick="addTask()">Add</button>
+    </div>
+    <ul class="todo-list" id="todoList"></ul>
+  </div>
+
+  <script>
+    // Load tasks from localStorage when the page loads
+    window.onload = function() {
+      loadTasks();
+    };
+
+    // Function to load tasks from localStorage
+    function loadTasks() {
+      const todoList = document.getElementById('todoList');
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+      tasks.forEach(task => {
+        const li = document.createElement('li');
+        li.classList.add('todo-item');
+
+        // Create task span
+        const span = document.createElement('span');
+        span.textContent = task.text;
+        if (task.completed) {
+          span.classList.add('completed');
+        }
+
+        // Create the delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = function() {
+          deleteTask(li);
+        };
+
+        // Mark task as completed on click
+        span.onclick = function() {
+          span.classList.toggle('completed');
+          saveTasks(); // Save the tasks after toggle
+        };
+
+        // Append span and button to the list item
+        li.appendChild(span);
+        li.appendChild(deleteButton);
+
+        // Append list item to the to-do list
+        todoList.appendChild(li);
+      });
+    }
+
+    // Function to add a new task
+    function addTask() {
+      const input = document.getElementById('todoInput');
+      const taskText = input.value.trim();
+
+      if (taskText !== '') {
+        const todoList = document.getElementById('todoList');
+        const li = document.createElement('li');
+        li.classList.add('todo-item');
+
+        // Create task span
+        const span = document.createElement('span');
+        span.textContent = taskText;
+
+        // Create the delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = function() {
+          deleteTask(li);
+        };
+
+        // Mark task as completed on click
+        span.onclick = function() {
+          span.classList.toggle('completed');
+          saveTasks(); // Save the tasks after toggle
+        };
+
+        // Append span and button to the list item
+        li.appendChild(span);
+        li.appendChild(deleteButton);
+
+        // Append list item to the to-do list
+        todoList.appendChild(li);
+
+        // Save tasks after adding a new one
+        saveTasks();
+
+        // Clear the input field
+        input.value = '';
+      }
+    }
+
+    // Function to delete task with slide-out animation
+    function deleteTask(task) {
+      task.classList.add('delete');
+      setTimeout(() => {
+        task.remove(); // Remove task from DOM after the animation
+        saveTasks(); // Save tasks after deletion
+      }, 500); // Delay the removal by 500ms (duration of the slide-out animation)
+    }
+
+    // Function to save tasks to localStorage
+    function saveTasks() {
+      const todoList = document.getElementById('todoList');
+      const tasks = [];
+
+      // Loop through each list item and get the task data
+      const todoItems = todoList.getElementsByClassName('todo-item');
+      for (let item of todoItems) {
+        const span = item.querySelector('span');
+        const completed = span.classList.contains('completed');
+        tasks.push({ text: span.textContent, completed });
+      }
+
+      // Save tasks to localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Optional: Allow "Enter" key to add task
+    document.getElementById('todoInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        addTask();
+      }
+    });
+  </script>
+
+</body>
+</html>

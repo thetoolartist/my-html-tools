@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Customer & Internal Replies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #121212;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: center;
+        }
+        h2 {
+            font-size: 28px;
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        .category-options {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .category-option {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .customer {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .internal {
+            background-color: #4db6ac;
+            color: white;
+        }
+        .category-option:hover {
+            transform: scale(1.1);
+        }
+        .search-box {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            transition: 0.3s;
+        }
+        .search-box:focus {
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+        }
+        .reply {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .copy-btn {
+            margin-top: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        .highlight {
+            background-color: orange;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Search Draft Demo Replies</h2>
+        <div class="category-options">
+            <div class="category-option customer" onclick="setCategory('customer')">Customer Replies</div>
+            <div class="category-option internal" onclick="setCategory('internal')">Internal Notes</div>
+        </div>
+        <input type="text" id="searchBox" class="search-box" onkeyup="searchReplies()" placeholder="Search for replies...">
+    </div>
+    <div id="results"></div>
+
+    <script>
+        let selectedCategory = 'customer';
+
+        const replies = {
+            customer: [
+                {
+                    title: "Request to Close Ticket",
+                    body: `Hi Tamara,\n\nIf you do not have more quarry then can you please close this ticket?\n\nThank you once again for being a valued member of the MyTAXPrepOffice Community. We look forward to your response so we can assist you further.`
+                },
+                {
+                    title: "Request to Close Duplicate Ticket",
+                    body: `Hi Hilda,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nPlease note that this is a duplicate ticket of the ticket number "2730124". Kindly close this ticket as the team is already working on your original ticket "2730124". We will provide you with an update as soon as possible.\n\nIf you have any further questions or need additional assistance, feel free to reach out.\n\nThank you for being a part of the MyTAXPrepOffice family!`
+                },
+                {
+                    title: "Request for Additional Details on Client Login Issue",
+                    body: `Hi Lucia,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nTo better assist your client with the login issue to her portal account, could you please provide more details? A screenshot of the issue would be very helpful in identifying the problem and working toward a quick resolution.\n\nIf you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team.`
+                },
+                {
+                    title: "Request for Additional Details Regarding Form Issue",
+                    body: `Hi Ihor,\n\nThank you for reaching out to MyTAXPrepOffice. We’re happy to assist you.\n\nCould you please provide more details about the issue you’re experiencing? Specifically:\n\n- Which form are you referring to?\n- What incorrect error message are you seeing?\n- A screenshot or the exact wording of the error message (if possible).\n\nThis information will help us investigate and resolve the issue more quickly.\n\nMost of the errors are related to required information. If you click on the error code, it will direct you to the corresponding field that needs to be completed.\n\nIf you still need assistance, please don’t hesitate to reach out.\n\nThank you for being a valued part of the MyTAXPrepOffice team!`
+                },
+                {
+                    title: "Response to Form 4562 Query",
+                    body: `Hi Barbara,\n\nThank you for reaching out to MyTAXPrepOffice. We’re happy to assist you.\n\nWe have reviewed your query and confirmed that Form 4562 is already included in the return. Please refer to the attached snapshot for more details.\n\nFor Tax Year 2024, Form 4562 is added differently to ensure data consistency. Please follow these steps to add it to the return:\n\n1) Open the return and navigate to "Add Form."\n2) Search for Form 4562 and choose either "Asset Depreciation" or "Vehicle Depreciation."\n3) The system will open the respective summary page. Click "Add New" and enter the necessary details—Form 4562 will be automatically added based on the form selected in the Form Column.\n\nFor further guidance, please refer to the following support articles:\n\n- To add an asset from the "Tool" section: https://app.mytaxprepoffice.com/support/article/1.0/258\n- How is Form 4562 activated?: https://app.mytaxprepoffice.com/support/article/1.0/1876\n\nIf this resolves your concern, please feel free to close the ticket. However, if you need further assistance, don’t hesitate to reach out—we’re happy to help!\n\nThank you for being a valued part of the MyTAXPrepOffice family.`
+                },
+                {
+                    title: "Response to Missing Signature Issue",
+                    body: `Hi Jeffrey,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nOur development team has reviewed the details and confirmed that the signature is present in the return. If you are still experiencing the issue, please provide a screenshot of the print preview or the printed PDF where the signature is missing. This will help us investigate further and provide a resolution.\n\nIf you have any further questions, please feel free to reach out.\n\nThank you for being a valued member of the MyTAXPrepOffice family.`
+                },
+                {
+                    title: "Response to Special Characters in Address Query",
+                    body: `Hi Hemalatha,\n\nWe understand your concern regarding special characters in the address during the transit return and whether an alert can be triggered during the Performa review.\n\nOur software already has a function in place that detects special characters and generates an error when they are entered. However, if you have encountered a specific case or can provide more details, we would be happy to review it further. Your feedback will help us improve our software and enhance its functionality.\n\nPlease let us know how we can assist you further.`
+                },
+                {
+                    title: "Response to Partner Residency Status Query",
+                    body: `Hi Gracie,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nIn the Client Information Sheet, under Section: Partner Information, Line 1a, Column D defines the partner's residency status and carries it over to the state forms. Also, for the KY 740NP-WH Form, the non-resident partner's income or payment must be included in the form.\n\nPlease feel free to contact us if you have any further questions.\n\nThank you for being part of the MyTAXPrepOffice family.`
+                },
+                {
+                    title: "Request to Close Duplicate Ticket",
+                    body: `Hi Gracie,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nPlease note that this is a duplicate ticket of the ticket number "2728902". Kindly close this ticket as the team is already working on your original ticket "2728902". We will provide you with an update as soon as possible.\n\nIf you have any further questions or need additional assistance, feel free to reach out.\n\nThank you for being a part of the MyTAXPrepOffice family!`
+                },
+                {
+                    title: "Response to Print Return Issue",
+                    body: `Hello ANDREA,\n\nThank you for contacting MyTAXPrepOffice. We’re delighted to assist you and sincerely appreciate the trust you place in our services.\n\nAfter analyzing the issue you mentioned, we have identified a resolution. To apply the necessary changes, kindly follow the steps outlined below:\n\n1) Open the return.\n\n2) Click on your username in the top right corner of the return screen, then select Reload App.\n\n3) Go to the print and select "Print Return" for print.\n\nIf you have any questions or need further clarification, please do not hesitate to reach out. We are always here to assist you and ensure a seamless experience.\n\nThank you once again for being a valued member of the MyTAXPrepOffice Community. We look forward to your response so we can assist you further.`
+                },
+                {
+                    title: "Response to Return Rejection Issue",
+                    body: `Hello ANDREA,\n\nThank you for reaching out to MyTAXPrepOffice. We deeply appreciate the trust you place in our services, and we are delighted to assist you.\n\nUpon reviewing the issue you mentioned, we have determined that the return has been rejected with the following error:\n\n"AZIndividual2024v2.1 is not supported. Use the most current version.; XML - Return failed Schema Version Validation".\n\nTo resolve this, please follow the steps below:\n\n1. Open the return.\n\n2. Unlock the return.\n\n3. Click on your username in the top-right corner of the return screen and select Reload App.\n\n4. Save the return and retransmit it.\n\nThis should address the issue.\n\nShould you have any further questions or require additional clarification, please do not hesitate to contact us. We are here to provide unwavering support and ensure a seamless experience for you.\n\nThank you once again for being a valued member of the MyTAXPrepOffice Community. We look forward to your response and the opportunity to assist you further.`
+                },
+                {
+                    title: "Reload and Recalculate",
+                    body: `Hi Gracie,\n\nThank you for contacting MyTAXPrepOffice. We’re delighted to assist you and sincerely appreciate the trust you place in our services.\n\nAfter analyzing the issue you mentioned, we have identified a resolution. To apply the necessary changes, kindly follow the steps outlined below:\n\n1) Open the return.\n\n2) Click on your username in the top right corner of the return screen, then select Reload App.\n\n3) Reopen the return and click on the Tools button at the top of the screen and select Recalculate.\n\nIf you have any questions or need further clarification, please do not hesitate to reach out. We are always here to assist you and ensure a seamless experience.\n\nThank you once again for being a valued member of the MyTAXPrepOffice Community. We look forward to your response so we can assist you further.`
+                },
+                {
+                    title: "Perform Review Reply",
+                    body: `Hi Gracie,\n\nThank you for contacting MyTAXPrepOffice. We’re delighted to assist you and sincerely appreciate the trust you place in our services.\n\nAfter analyzing the issue you mentioned, we have identified a resolution. To apply the necessary changes, kindly follow the steps outlined below:\n\n1) Open the return.\n\n2) Click on your username in the top right corner of the return screen, then select Reload App.\n\n3) Reopen the return and click on the Tools button at the top of the screen and select Recalculate.\n\n4) Click on perform review. Now no error will be displayed.\n\nIf you have any questions or need further clarification, please do not hesitate to reach out. We are always here to assist you and ensure a seamless experience.\n\nThank you once again for being a valued member of the MyTAXPrepOffice Community. We look forward to your response so we can assist you further.`
+                },
+                {
+                    title: "Need Screenshot from Customer",
+                    body: `Hi Gracie,\n\nThank you for contacting MyTAXPrepOffice. We’re delighted to assist you and sincerely appreciate the trust you place in our services.\n\nWe’ve carefully analyzed the return you mentioned but, unfortunately, were unable to identify or replicate the issue as described. To better understand and resolve the problem, we kindly request the following:\n\n1. A detailed description of the issue you’re experiencing.\n\n2. A screenshot of the specific area or error you’re encountering.\n\nProviding these details will help us analyze the issue more thoroughly and offer you the best possible solution as quickly as possible.\n\nPlease rest assured that we are committed to resolving this matter to your satisfaction. Should you need any further assistance or clarification, we are always here to help.\n\nThank you once again for being a valued member of the MyTAXPrepOffice Community. We look forward to your response so we can assist you further.`
+                },
+                {
+                    title: "EIN Library",
+                    body: `Hi Gracie,\n\nThank you for reaching out to MyTAXPrepOffice. We’re happy to assist you.\n\nUpon reviewing your return, could you please verify whether the EIN (47-3647768) address has been updated in the EIN Library? This issue may occur if information is entered in both the U.S. address fields and Foreign address fields.\n\nFor guidance on updating the EIN address, please refer to the following article:\n\nhttps://app.mytaxprepoffice.com/support/article/1.0/3591\n\nIf this resolves your inquiry, kindly close the ticket. However, if you need further assistance, please don’t hesitate to reach out—we’re always here to help.\n\nWe truly appreciate your trust in MyTAXPrepOffice and look forward to assisting you.`
+                },
+                {
+                    title: "Unable to Reproduce Issue and Need Screenshot of Error",
+                    body: `Hi Mubaraka,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nWe attempted to reproduce the issue on our end but were unable to duplicate the scenario.\n\nTo better understand the problem, could you please share a screenshot of any error message or behavior you encountered while trying to link the return to the client? This will help us investigate the issue more effectively.\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team.`
+                },
+                {
+                    title: "Return Rejection Reason and Resolution",
+                    body: `Hi JAGDISHCHANDRA,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nWe noticed that your return was rejected due to incorrect data.\n\nUpon reviewing the request for EIN **-4216824, we found that you transmitted your Federal 1120S return on 03/ /2025 at 05:19 PM. The value reported on Form 1120-S, "Schedule K Shareholders Pro Rata Share Items" (Line 1), was $900.\n\nHowever, when you transmitted the Illinois (IL) return on 03/12/2025 at 02:48 PM, the amount reported on "IL-1120-ST Small Business Corporation Replacement Tax Return" Step 2, Line 1, was $875.\n\nIt appears that discrepancies between the Federal and IL returns may have contributed to the rejection.\n\nPlease review these discrepancies and make the necessary corrections before resubmitting the return.\n\nTo resolve the rejection, you have two options:\n1) Update IL-1120-ST, Line 1, to match the $900 reported on Form 1120-S, which was accepted on the federal return.\n2) Alternatively, you can file an amended return. For more details, please refer to the article linked below:\n\nHow do I prepare an amended 1120S or 1120 return?\nhttps://app.mytaxprepoffice.com/support/article/1.0/2947\n\nPlease feel free to contact us if you have any further questions.\n\nThank you for being the most important part of the MyTAXPrepOffice team.`
+                },
+                {
+                    title: "Unable to Reproduce Issue and Need Screenshot of Error",
+                    body: `Hi Keri,\n\nThank you for contacting MyTAXPrepOffice. We’re happy to assist you.\n\nWe have reviewed your return and attempted to reproduce the issue, but we were unable to do so on our end. To investigate further, could you provide a screenshot of the affected area? Please highlight the specific section, box, or line where you're experiencing the state generation issue. This will help us better understand the problem and work toward a resolution.\n\nIf you need further assistance, please don’t hesitate to reach out. We appreciate your time and thank you for being a valued part of the MyTAXPrepOffice community.`
+                },
+                {
+                    title: "Worksheet Calculation Handled in Backend",
+                    body: `Hi NANCY,\n\nWe have reviewed your issue and found that Worksheet 2 for MI Form 4884 is not included as a separate worksheet in the form itself within our software. However, the calculations for Worksheet 2 have already been handled in the backend to ensure accuracy.\n\nIf you need to review Worksheet 2, you can refer to the instruction PDF for MI Form 4884, where it is available for reference.\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team.`
+                },
+                {
+                    title: "Analyse and Prepare",
+                    body: `Hello Team,\n\nWe have received a ticket from a customer asking, "How is Canada Pension Reported?"\n\nWe have found the following article from our system:\n\nhttps://app.mytaxprepoffice.com/support/article/1.0/5778\n\nWe also found different information regarding this on Intuit TurboTax. Please refer to the following post for that information:\n\nhttps://ttlc.intuit.com/turbotax-support/en-us/help-article/retirement-benefits/enter-canada-pension-plan-cpp-old-age-security-oas/L1fw5Jpmv_US_en_US\n\nWe are unsure which is correct and required for the customer’s question. Could you please review and guide us in this matter?`
+                },
+                {
+                    title: "Analyse and Prepare",
+                    body: `Hi Stephen,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nWe have reviewed your return and found that the issue is caused by Form VT HS-122, Section A, Lines A2 and A3, where text data has been entered instead of a percentage. This is preventing the system from generating the print file properly.\n\nTo resolve this, please review these fields and enter the appropriate data in percentage format as per your requirements. Once updated, you should be able to generate the print file successfully.\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team.`
+                },
+                {
+                    title: "EIN Address Issue and Resolution",
+                    body: "Hi Blaine,\n\nThank you for providing the screenshots. We appreciate your patience while we reviewed the issue.\n\nWe have reviewed the images provided by you and found that The PAYER’S/TRUSTEE’S address fields currently contain both a U.S. and a foreign address. Only one address type should be present. Additionally, the foreign address fields are missing a country selection, which is triggering a mandatory error.\n\nMyTAXPrepOffice has an EIN Library feature that stores EIN-related details, including addresses. It appears that foreign address data is being auto-filled for your EIN template when you recalculate the return, even though the \"Check if Foreign Address\" box is unchecked.\n\nTo resolve this, please review and update the EIN Library template to ensure it reflects the correct address. You can follow the steps outlined in this article:\nhttps://app.mytaxprepoffice.com/support/article/1.0/1740\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Foreign Address Auto-Fill Issue",
+                    body: "Hi Cleveland,\n\nThank you for contacting MyTAXPrepOffice. We are happy to help!\n\nWe have reviewed your query and found that foreign address data is being auto-filled based on your EIN template.\n\nMyTAXPrepOffice has an EIN Library feature that stores EIN-related details, including addresses. When a saved EIN is entered on a form, it populates the details stored in the EIN library.\n\nTo resolve this, please review and update the EIN Library template to ensure it reflects the correct address. You can follow the steps outlined in this article:\nhttps://app.mytaxprepoffice.com/support/article/1.0/1740\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Vermont Income Data Missing",
+                    body: "Hi Elysa,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nWe have reviewed your return and found that no Vermont income data has been populated. Please add Vermont income data to activate Form VT Schedule BI-477.\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Federal Extension Return Information",
+                    body: "Hi Jasmine,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nWe have reviewed your query and found that you have created a federal extension return. Please note that AGI and tax due/refund amounts are not applicable for a federal extension return, which is why these values are not appearing in your return.\n\nTo create an original return, please follow these steps:\n\n1. Navigate to the Return List.\n2. Locate your current federal extension return and select Copy from the Actions drop-down menu.\n3. Open the copied return and allow a few moments for it to load.\n4. You will see that Form 1040 is now active and selected in the Form Selection of CIS.\n5. You can now proceed with preparing your return as usual, and all relevant data will be retained.\n\nNote: Once you copy the federal extension return, the original return will be locked for editing. If you need to make any modifications to the original return, you may need to unlock it first.\n\nAdditionally, you can refer to the article below for more related details:\n\nhttps://app.mytaxprepoffice.com/support/article/1.0/203\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Kentucky State Residency Mismatch",
+                    body: "Hi Jass,\n\nThank you for contacting MyTAXPrepOffice. We’re happy to assist you.\n\nWe have reviewed your return and found that you are filing a Kentucky (KY) state return as a Non-Resident. However, in the Client Information Sheet under \"State Information,\" you have selected Full-Year Resident for KY. Please review and ensure that the residency status is consistent between the Client Information Sheet and the state return.\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Response to Dependent Information Issue",
+                    body: `Hi [Customer Name],\n\nThank you for bringing this to our attention. We understand that the dependent information is reappearing after recalculating the return, even after you’ve deleted it from the 1040X form.\n\nWe’ve already provided the necessary steps to remove the dependent from the Client Information Sheet to prevent it from reappearing. However, we understand this solution did not meet your expectations.\n\nIf you reach out via chat, we are ready to assist you live and help resolve this issue for you. Please don’t hesitate to contact us for further assistance.\n\nThank you for your understanding, and we’re here to help you resolve this issue as soon as possible.`
+                },
+                {
+                    title: "NJ-1041SB Schedule F Activation Criteria Review",
+                    body: "Hello Lissette,\n\nWe have reviewed the NJ-1041SB Schedule F activation calculation. Based on the current calculation, Schedule F will activate if both of the following conditions are met:\n\n1. The main form, NJ-1041SB, is activated.\n2. Any one line in the \"Amount x Factor\" column on NJ-1041SB Schedule F contains a value other than 0.\n\nPlease refer to the attached screenshot for further clarification. Kindly let us know if any adjustments are necessary.\n\nThanks!"
+                },
+                {
+                    title: "Multiple Issues in Return: Refresh Required, Unlocking Error, and Rejection Steps",
+                    body: "Hi Mary,\n\nThank you for contacting MyTAXPrepOffice. We’re happy to assist you.\n\nWe have reviewed your return and found that your ticket includes three separate queries. Please see our responses below:\n\n**1. Return Needs to be Refreshed Again**\n\nAlthough you refreshed the return before transmitting, it still needs to be refreshed now. This is because there was a bug present during your previous transmission, which has since been corrected. To apply the updated fix, Refresh is required before transmitting again.\n\n**2. Return Rejection and Unable to Unlock**\n\nThe reason you may be unable to unlock the return is that it is still in transmission status. A return cannot be unlocked while it is in this state. You will need to wait until both the federal and state returns have either been accepted or rejected before making any changes.\n\nFor example:\n- If the federal return was rejected but the state return is still in transmission, you must wait for the state return to be accepted or rejected before unlocking.\n- If the federal return was accepted but the state return is still in transmission, you still need to wait until the state return finishes processing.\n\n**3. Steps to Resolve the Rejection Error**\n\nOnce the return is unlocked and accessible, please follow these steps to correct the rejection:\n\n- Open Form KY 740-NP and make sure to select the required field \"POLITICAL PARTY FUND\" for Yourself.\n- Click the Tools button at the top of the screen and choose Recalculate.\n- Save the return and transmit it again.\n\nThis should resolve the rejection issue and allow the return to be submitted successfully.\n\nIf this resolves your concerns, please go ahead and close the ticket. If you need any further assistance, feel free to reach out to us again. We’re always here to help.\n\nThank you for being a valued part of the MyTAXPrepOffice community."
+                },
+                {
+                    title: "Return Printing Issue – Unable to Reproduce the Problem",
+                    body: "Hi THANH,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nWe have reviewed the provided backup return and tested printing using all available print packets. The return printed successfully from our end without any issues, so this may have been a temporary glitch.\n\nPlease try printing the return again on your end. If the issue persists, kindly share a screenshot or any error message you receive so we can investigate further and assist you more accurately.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Acknowledgment of Potential Calculation Issue Impacting Multiple Returns",
+                    body: "Hi Surya,\n\nThank you for bringing this to our attention.\n\nYou're right – if this calculation issue was present, it may have impacted multiple returns. We truly appreciate your diligence in notifying us. Please let us know if you need any help for e-file return.\n\nIf this answers your question, please close the ticket. If you still need assistance, please feel free to reach out to us.\n\nThank you for being the most important part of the MyTAXPrepOffice team."
+                },
+                {
+                    title: "Steps to Apply Software Update and Retransmit Return",
+                    body: "Hi Alicia,\n\nThank you for contacting MyTAXPrepOffice. We are happy to assist you.\n\nOur Team has made an update to the software. To apply the change, please follow the steps below:\n\n1) Open the return.\n2) Unlock the return.\n3) Click on your username in the top-right corner of the return screen and select Reload App.\n4) Please click on the Tools button at the top of the screen and select Recalculate.\n5) Save the return and retransmit it.\n\nPlease feel free to contact us if you have any further questions.\n\nThank you for being part of the MyTAXPrepOffice family."
+                }
+
+
+            ],
+            internal: [
+                {
+                    title: "Taxpayer's Signature Missing in Print Preview",
+                    body: "Hello,\n\nThe customer is facing an issue where the taxpayer's signature does not appear in the print preview or the printed PDF. Could you please investigate the cause of this issue?\n\nPlease refer to the attached printed return PDF provided by the client for more details.\n\nThank you,\n\nYour name"
+                },
+                {
+                    title: "Dependent Information Reappears After Recalculation",
+                    body: "Hello,\n\nCustomer was facing an issue regarding dependent information that he deletes from 1040X form and it reappears after recalculating the return.\n\nWe have tested the client issue and based on that, we provided steps to remove dependent information from the source \"Client Information Sheet\" so it does not reappear when he recalculates the return after removing it from the source.\n\nHowever, the client is not satisfied and wants to try the chat to see if he can get the issue resolved live.\n\nKindly guide this customer if he comes to the chat for this query."
+                },
+                {
+                    title: "Clarification on Reporting Canada Pension",
+                    body: "Hello Team,\n\nWe have received a ticket from a customer asking, \"How is Canada Pension reported?\"\n\nWe found the following article in our system:\n\nhttps://app.mytaxprepoffice.com/support/article/1.0/5778\n\nAdditionally, we came across a different explanation on Intuit TurboTax:\n\nhttps://ttlc.intuit.com/turbotax-support/en-us/help-article/retirement-benefits/enter-canada-pension-plan-cpp-old-age-security-oas/L1fw5Jpmv_US_en_US\n\nWe are unsure which information is correct or most relevant to the customer's query. Could you please review these sources and provide guidance on how to respond accurately?\n\nThank you for your assistance.\n\nThanks!"
+                },
+                {
+                    title: "AGI and Refund/Due Amount Missing in Panel",
+                    body: "Hello,\n\nThe customer is experiencing an issue where the AGI and Refund/Due amount are not appearing in the top left side panel for this return. Please refer to the attached snapshot for more details.\n\nLet me know if you need additional information.\n\nThank you."
+                },
+                {
+                    title: "Login Issue with Account Does Not Exist Error",
+                    body: "Hello,\n\nThe client is experiencing an issue logging into their portal and is seeing the error message \"Account does not exist\" when attempting to log in to her portal.\n\nCould you please look into this issue and take the necessary steps to resolve it?\n\nThanks!"
+                },
+                {
+                    title: "PA Schedule C – Simplified Method Deduction Incorrectly Flowing from Federal",
+                    body: "Hello Team,\n\nWe’ve received the following issue from a customer regarding Line 37 of the Pennsylvania Schedule C.\n\nCurrently, the software carries the Simplified Method home office deduction from federal Form 8829, via Schedule C (1040), over to Line 37 of the Pennsylvania Schedule C. However, Pennsylvania does not allow the use of the Simplified Method and requires that only actual expenses be reported. As a result, this may lead to incorrect deductions on the state return unless the user manually overrides the amount.\n\nFor the next release, it would be helpful if the system could either block the Simplified Method from flowing to the PA return or display a clear warning prompting users to enter only actual expenses.\n\nThanks!"
+                },
+                {
+                    title: "Form Rendering Issue in Print Preview Mode",
+                    body: "Hello Rahul,\n\nWhile working on this CPA ticket, we encountered an issue with the GA IT-CONSV form. Specifically, the form does not render correctly in \"Print Preview\" mode – black spots appear on the screen during the preview.\n\nFor your reference, please see the attached snapshot \"Form GA IT CONSV Preview Issue\".\n\nKindly look into this issue and take the necessary steps to resolve it.\n\nThank you!"
+                },
+                {
+                    title: "Reply to US team after CPA ticket change",
+                    body: "Hello US Team,\n\nWe have updated the calculation logic in TY2024 and TY2025 for Form GA 501 Schedule 4, Line 4 as per your suggestion. Kindly review the changes and let us know if any further modifications are required.\n\nThanks!"
+                },
+                {
+                    title: "Reply to US team after CPA ticket change",
+                    body: "Hello US Team,\n\nAs per your suggestion, we have implemented the additional adjustment to \"Form PA-8453C\" in the \"1120 return type\" for \"TY2024 and TY2025\". Now If \"Check if also paid preparer\" is selected and \"E-file Summary > Preparer Information > Self-employed\" checkbox is selected, then the \"Check if self-employed\" checkbox on \"PA-8453F\" will now be selected accordingly.\n\nThe changes have been tested on Alpha and released to Live for TY2024.\n\nKindly review the changes and let us know if any further modifications are required.\n\nThanks!"
+                },
+                {
+                    title: "Reply to US team after CPA ticket change",
+                    body: "Hello US Team,\n\nWe have implemented the suggested changes for GA 1041 tax form on nextalpha based on your inputs. The updates are now complete, and we kindly request you to review them.\n\nPlease find the attached file, which includes the status of the changes implemented for both 2024 and 2025. Remarks have also been added wherever necessary for your reference.\n\nKindly review the changes and let us know if any further updates are required or if we are good to proceed with the live release.\n\nThanks!"
+                }
+            ]
+        };
+
+        function setCategory(category) {
+            selectedCategory = category;
+            searchReplies();
+        }
+
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(query, 'gi');
+            return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+        }
+
+        function searchReplies() {
+            const query = document.getElementById("searchBox").value.toLowerCase();
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+
+            const filteredReplies = replies[selectedCategory].filter(reply =>
+                reply.title.toLowerCase().includes(query) || reply.body.toLowerCase().includes(query)
+            );
+
+            (query ? filteredReplies : replies[selectedCategory]).forEach((reply, index) => {
+                const replyDiv = document.createElement("div");
+                replyDiv.classList.add("reply");
+
+                const replyBodyHTML = highlightText(reply.body.replace(/\n/g, "<br>"), query);
+                const escapedBody = reply.body.replace(/"/g, '&quot;');
+
+                replyDiv.innerHTML = `
+                    <strong>${index + 1}. ${reply.title}</strong>
+                    <p>${replyBodyHTML}</p>
+                    <button class="copy-btn" data-reply="${escapedBody}" onclick="copyToClipboard(this)">Copy</button>
+                `;
+                resultsDiv.appendChild(replyDiv);
+            });
+        }
+
+        function copyToClipboard(buttonElement) {
+            const text = buttonElement.getAttribute("data-reply");
+            navigator.clipboard.writeText(text).catch(err => console.error("Error copying text: ", err));
+        }
+
+        searchReplies();
+    </script>
+</body>
+</html>

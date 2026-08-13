@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Editable Note</title>
+    <style>
+        #editor {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 200px;
+            font-family: Verdana, sans-serif; /* Fixed font style */
+            font-size: large; /* Fixed font size */
+        }
+    </style>
+</head>
+<body>
+    <h1>My Persistent Note</h1>
+    <div id="editor" contenteditable="true">
+        Type your notes here...
+    </div>
+    <script>
+        const editor = document.getElementById('editor');
+
+        // Load saved data when the page loads
+        window.onload = function() {
+            const savedData = localStorage.getItem('editableContent');
+            if (savedData) {
+                editor.innerHTML = savedData;
+            }
+        };
+
+        // Save data to localStorage whenever content changes
+        editor.addEventListener('input', function() {
+            localStorage.setItem('editableContent', editor.innerHTML);
+        });
+    </script>
+</body>
+</html>

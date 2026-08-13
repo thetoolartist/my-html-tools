@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder System</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        input[type="time"], input[type="text"] {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        input[type="time"]:focus, input[type="text"]:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 5px rgba(108, 92, 247, 0.3);
+        }
+        button {
+            background-color: #6c5ce7;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #5a4be8;
+        }
+        .reminder-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 20px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .reminder-message.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .reschedule-btn {
+            margin-top: 20px;
+            background-color: #2ecc71;
+            display: none;
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .reschedule-btn:hover {
+            background-color: #27ae60;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Set Your Reminder</h2>
+        <input type="time" id="reminder-time" value="12:00">
+        <input type="text" id="reminder-message" placeholder="Enter your reminder message">
+        <button onclick="setReminder()">Set Reminder</button>
+        <div class="reminder-message" id="reminder-display"></div>
+        <button class="reschedule-btn" id="reschedule-btn" onclick="rescheduleReminder()">Reschedule Reminder</button>
+    </div>
+
+    <script>
+        // Function to set a new reminder
+        function setReminder() {
+            const reminderTime = document.getElementById('reminder-time').value;
+            const reminderMessage = document.getElementById('reminder-message').value;
+
+            if (reminderTime && reminderMessage) {
+                localStorage.setItem('reminderTime', reminderTime);
+                localStorage.setItem('reminderMessage', reminderMessage);
+                document.getElementById('reminder-display').innerText = `Reminder set for ${reminderTime} - ${reminderMessage}`;
+                document.getElementById('reminder-display').classList.add('show');
+                document.getElementById('reschedule-btn').style.display = 'block'; // Show reschedule button
+                checkReminder(); // Check for reminder right away
+            } else {
+                alert('Please enter both time and message.');
+            }
+        }
+
+        // Function to reschedule the reminder
+        function rescheduleReminder() {
+            document.getElementById('reminder-time').value = '';
+            document.getElementById('reminder-message').value = '';
+            document.getElementById('reminder-display').innerText = '';
+            document.getElementById('reminder-display').classList.remove('show');
+            localStorage.removeItem('reminderTime');
+            localStorage.removeItem('reminderMessage');
+            document.getElementById('reschedule-btn').style.display = 'none'; // Hide reschedule button
+        }
+
+        // Function to check the time and show the reminder if it's time
+        function checkReminder() {
+            const reminderTime = localStorage.getItem('reminderTime');
+            const reminderMessage = localStorage.getItem('reminderMessage');
+
+            if (reminderTime && reminderMessage) {
+                const currentTime = new Date();
+                const reminderTimeParts = reminderTime.split(':');
+                const reminderDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), reminderTimeParts[0], reminderTimeParts[1]);
+
+                if (currentTime >= reminderDate && currentTime < new Date(reminderDate.getTime() + 60000)) {
+                    // Show reminder message
+                    alert(`Reminder: ${reminderMessage}`);
+                    document.getElementById('reminder-display').innerText = `Reminder triggered for ${reminderTime} - ${reminderMessage}`;
+                    document.getElementById('reminder-display').classList.add('show');
+                }
+            }
+        }
+
+        // Function to continuously check reminder every minute
+        function startReminderChecker() {
+            setInterval(() => {
+                checkReminder();
+            }, 60000); // Check every minute
+        }
+
+        // Start the reminder checker when the page loads
+        window.onload = function () {
+            // Load any saved reminder on page load
+            const savedTime = localStorage.getItem('reminderTime');
+            const savedMessage = localStorage.getItem('reminderMessage');
+
+            if (savedTime && savedMessage) {
+                document.getElementById('reminder-display').innerText = `Reminder set for ${savedTime} - ${savedMessage}`;
+                document.getElementById('reminder-display').classList.add('show');
+                document.getElementById('reschedule-btn').style.display = 'block'; // Show reschedule button
+            }
+
+            // Start checking reminder time
+            startReminderChecker();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual Time Tracker </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f4f4f4;
+    }
+
+    .tracker-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .tracker {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #ccc;
+      padding: 20px;
+      width: 45%;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    button {
+      margin: 5px 5px 15px 0;
+      padding: 8px 18px;
+      font-size: 14px;
+    }
+
+    .log {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      height: 180px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .summary {
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 15px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .tracker {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Work Time Tracker </h1>
+
+<div class="tracker-container">
+  <!-- Productive Tracker -->
+  <div class="tracker">
+    <h2>🔵 Productive Hours Time Tracker</h2>
+    <button onclick="startClock('productive')">Start</button>
+    <button onclick="stopClock('productive')">Stop</button>
+    <button onclick="resumeClock('productive')">Resume</button>
+    <button onclick="resetClock('productive')">Reset</button>
+    <div class="log" id="productive-log"></div>
+    <div class="summary" id="productive-summary"></div>
+  </div>
+
+  <!-- System Issue Tracker -->
+  <div class="tracker">
+    <h2>🔴 System Issue Time Tracker</h2>
+    <button onclick="startClock('issue')">Start</button>
+    <button onclick="stopClock('issue')">Stop</button>
+    <button onclick="resumeClock('issue')">Resume</button>
+    <button onclick="resetClock('issue')">Reset</button>
+    <div class="log" id="issue-log"></div>
+    <div class="summary" id="issue-summary"></div>
+  </div>
+</div>
+
+<script>
+  const clocks = {
+    productive: {
+      isRunning: false,
+      startTime: null,
+      totalTime: 0,
+      logs: [],
+    },
+    issue: {
+      isRunning: false,
+      startTime: null,
+      totalTime: 0,
+      logs: [],
+    }
+  };
+
+  // Format ms to hh:mm:ss
+  function formatTime(ms) {
+    const sec = Math.floor((ms / 1000) % 60);
+    const min = Math.floor((ms / (1000 * 60)) % 60);
+    const hr = Math.floor(ms / (1000 * 60 * 60));
+    return `${hr}h ${min}m ${sec}s`;
+  }
+
+  function log(text, type) {
+    clocks[type].logs.push(text);
+    saveData();
+    renderLogs(type);
+  }
+
+  function renderLogs(type) {
+    const logDiv = document.getElementById(`${type}-log`);
+    logDiv.innerHTML = "";
+    clocks[type].logs.forEach(entry => {
+      const div = document.createElement("div");
+      div.textContent = entry;
+      logDiv.appendChild(div);
+    });
+  }
+
+  function updateSummary(type) {
+    document.getElementById(`${type}-summary`).textContent =
+      `⏱️ Total Time: ${formatTime(clocks[type].totalTime)}`;
+  }
+
+  function startClock(type) {
+    const clock = clocks[type];
+    if (clock.isRunning) {
+      alert("Clock already running.");
+      return;
+    }
+    clock.startTime = new Date();
+    clock.isRunning = true;
+    log(`🟢 Started at ${clock.startTime.toLocaleTimeString()}`, type);
+    saveData();
+  }
+
+  function stopClock(type) {
+    const clock = clocks[type];
+    if (!clock.isRunning) {
+      alert("Clock is not running.");
+      return;
+    }
+    const stopTime = new Date();
+    const duration = stopTime - clock.startTime;
+    clock.totalTime += duration;
+    clock.isRunning = false;
+    log(`🔴 Stopped at ${stopTime.toLocaleTimeString()} | Session: ${formatTime(duration)}`, type);
+    updateSummary(type);
+    saveData();
+  }
+
+  function resumeClock(type) {
+    const clock = clocks[type];
+    if (clock.isRunning) {
+      alert("Clock already running.");
+      return;
+    }
+    clock.startTime = new Date();
+    clock.isRunning = true;
+    log(`⏯️ Resumed at ${clock.startTime.toLocaleTimeString()}`, type);
+    saveData();
+  }
+
+  function resetClock(type) {
+    if (!confirm("Are you sure you want to reset this tracker?")) return;
+
+    clocks[type] = {
+      isRunning: false,
+      startTime: null,
+      totalTime: 0,
+      logs: [],
+    };
+    renderLogs(type);
+    updateSummary(type);
+    saveData();
+  }
+
+  // Save to localStorage
+  function saveData() {
+    const data = {
+      productive: {
+        isRunning: clocks.productive.isRunning,
+        startTime: clocks.productive.startTime ? clocks.productive.startTime.toISOString() : null,
+        totalTime: clocks.productive.totalTime,
+        logs: clocks.productive.logs
+      },
+      issue: {
+        isRunning: clocks.issue.isRunning,
+        startTime: clocks.issue.startTime ? clocks.issue.startTime.toISOString() : null,
+        totalTime: clocks.issue.totalTime,
+        logs: clocks.issue.logs
+      }
+    };
+    localStorage.setItem("workTimeTracker", JSON.stringify(data));
+  }
+
+  // Load from localStorage
+  function loadData() {
+    const saved = localStorage.getItem("workTimeTracker");
+    if (!saved) return;
+
+    const data = JSON.parse(saved);
+
+    ["productive", "issue"].forEach(type => {
+      clocks[type].isRunning = data[type].isRunning;
+      clocks[type].startTime = data[type].startTime ? new Date(data[type].startTime) : null;
+      clocks[type].totalTime = data[type].totalTime || 0;
+      clocks[type].logs = data[type].logs || [];
+      renderLogs(type);
+      updateSummary(type);
+    });
+  }
+
+  // Auto-load on page open
+  loadData();
+</script>
+
+</body>
+</html>
