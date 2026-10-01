@@ -2,201 +2,209 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  :root {
-    --bg: #f5f7fb;
-    --card: rgba(255,255,255,.86);
-    --text: #172033;
-    --muted: #6b7280;
-    --border: #e7eaf0;
-    --accent: #4f46e5;
-    --accent2: #7c3aed;
-    --shadow: 0 12px 35px rgba(31,41,55,.08);
-  }
-  body.dark {
-    --bg: #0d1117;
-    --card: rgba(22,27,34,.9);
-    --text: #f3f4f6;
-    --muted: #9ca3af;
-    --border: #30363d;
-    --shadow: 0 12px 35px rgba(0,0,0,.28);
-  }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: var(--text);
-    background:
-      radial-gradient(circle at 10% 0%, rgba(99,102,241,.13), transparent 30%),
-      radial-gradient(circle at 90% 10%, rgba(124,58,237,.10), transparent 28%),
-      var(--bg);
-    transition: .25s ease;
-  }
-  .wrap { width: min(1180px, 92%); margin: auto; padding: 42px 0 55px; }
-  header {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 20px; margin-bottom: 34px;
-  }
-  .brand { display:flex; align-items:center; gap:14px; }
-  .logo {
-    width:52px; height:52px; border-radius:16px; display:grid; place-items:center;
-    color:white; font-size:25px; font-weight:800;
-    background: linear-gradient(135deg,var(--accent),var(--accent2));
-    box-shadow: 0 10px 25px rgba(79,70,229,.25);
-  }
-  h1 { margin:0; font-size: clamp(26px,4vw,38px); letter-spacing:-1px; }
-  .subtitle { margin:5px 0 0; color:var(--muted); font-size:14px; }
-  .actions { display:flex; gap:9px; }
-  button {
-    border:1px solid var(--border); background:var(--card); color:var(--text);
-    border-radius:12px; padding:10px 13px; cursor:pointer; font-size:14px;
-    backdrop-filter: blur(12px);
-  }
-  button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
-  .toolbar {
-    display:flex; gap:12px; align-items:center; margin-bottom:24px;
-  }
-  .search {
-    flex:1; position:relative;
-  }
-  .search input {
-    width:100%; border:1px solid var(--border); outline:none; border-radius:14px;
-    padding:14px 16px 14px 43px; font-size:15px; color:var(--text);
-    background:var(--card); backdrop-filter:blur(12px);
-  }
-  .search span { position:absolute; left:15px; top:12px; font-size:20px; opacity:.65; }
-  .count { color:var(--muted); font-size:13px; white-space:nowrap; }
-  .grid {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px;
-  }
-  .card {
-    display:block; text-decoration:none; color:inherit; padding:20px;
-    border:1px solid var(--border); border-radius:19px; background:var(--card);
-    box-shadow:var(--shadow); backdrop-filter:blur(14px);
-    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  }
-  .card:hover {
-    transform:translateY(-5px); border-color:rgba(79,70,229,.35);
-    box-shadow:0 18px 42px rgba(31,41,55,.13);
-  }
-  .icon {
-    width:45px; height:45px; border-radius:13px; display:grid; place-items:center;
-    font-size:21px; margin-bottom:16px; background:rgba(79,70,229,.1);
-  }
-  .card h2 { font-size:16px; margin:0 0 7px; }
-  .card p { font-size:13px; line-height:1.5; color:var(--muted); margin:0; min-height:39px; }
-  .open { margin-top:15px; color:var(--accent); font-size:13px; font-weight:700; }
-  .empty {
-    display:none; text-align:center; color:var(--muted); padding:45px;
-    border:1px dashed var(--border); border-radius:18px;
-  }
-  footer { text-align:center; color:var(--muted); font-size:12px; margin-top:38px; }
-  @media (max-width:600px) {
-    .wrap { padding-top:25px; }
-    header { align-items:flex-start; }
-    .toolbar { flex-direction:column; align-items:stretch; }
-    .count { text-align:right; }
-  }
+:root{ /* Mint (default) */
+  --bg:#f3fbf7; --bg2:#d9f4e8; --surface:#ffffff; --ink:#123a30; --muted:#5f7f76; --line:#d5ebe2;
+  --accent:#0f9d84; --accent-ink:#ffffff; --pop:#ff7a59;
+}
+:root[data-theme="peach"]{--bg:#fff7f1;--bg2:#ffe3d1;--ink:#4a2418;--muted:#8d6b5e;--line:#f6dccd;--accent:#f0663c;--pop:#7c5cff}
+:root[data-theme="sky"]{--bg:#f2f8ff;--bg2:#d7eaff;--ink:#14304f;--muted:#5f7a96;--line:#d3e3f5;--accent:#2f7df6;--pop:#ff6b9a}
+:root[data-theme="lilac"]{--bg:#f8f5ff;--bg2:#e6defc;--ink:#2c2150;--muted:#76699a;--line:#e3dcf6;--accent:#7a56e6;--pop:#18b58a}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,var(--bg2) 0,var(--bg) 340px) var(--bg);background-repeat:no-repeat;
+  transition:background-color .3s,color .3s
+}
+.wrap{width:min(1080px,92%);margin:0 auto;padding:30px 0 56px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:34px}
+.brand{font-weight:800;font-size:19px;display:flex;align-items:center;gap:10px}
+.brand i{width:34px;height:34px;border-radius:4px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-style:normal;font-size:17px}
+.swatches{display:flex;gap:9px;align-items:center}
+.swatches button{width:26px;height:26px;border-radius:3px;border:3px solid var(--surface);cursor:pointer;padding:0;box-shadow:0 0 0 1.5px var(--line)}
+.swatches button[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--ink)}
+.hero h1{margin:0 0 6px;font-size:clamp(30px,5.5vw,46px);font-weight:800;letter-spacing:-1px}
+.hero p{margin:0;color:var(--muted);font-weight:600}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:26px 0 30px}
+.search{position:relative;flex:1 1 300px}
+.search input{width:100%;height:52px;border-radius:4px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;padding:0 20px 0 50px;outline:none;transition:.2s}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.search span{position:absolute;left:19px;top:13px;font-size:20px;color:var(--muted)}
+.views{display:flex;background:var(--surface);border:2px solid var(--line);border-radius:4px;padding:4px;gap:2px}
+.views button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;padding:9px 15px;border-radius:2px;cursor:pointer;transition:.15s}
+.views button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+h2.t{font-size:17px;margin:0 0 14px;font-weight:800}
+h2.t small{color:var(--muted);font-weight:600;font-size:13px;margin-left:6px}
+section{margin-bottom:34px}
+
+/* shared item */
+.item{position:relative;background:var(--surface);border:2px solid var(--line);transition:transform .15s,border-color .15s,box-shadow .15s}
+.item:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 24px color-mix(in srgb,var(--accent) 18%,transparent)}
+.item a.main{position:absolute;inset:0;border-radius:inherit;z-index:1}
+.item a.main:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.ico{display:grid;place-items:center;flex:none;background:var(--c)}
+.item h3{margin:0;font-weight:800}
+.item p{margin:0;color:var(--muted);font-weight:600}
+.pin{position:relative;z-index:2;border:0;background:transparent;cursor:pointer;color:var(--muted);opacity:.5;font-size:19px;padding:5px 7px;border-radius:3px}
+.item:hover .pin,.pin.on,.pin:focus-visible{opacity:1}
+.pin.on{color:#f5a524}
+
+/* view: BUTTONS (default) */
+.grid.v-buttons{display:flex;flex-wrap:wrap;gap:12px}
+.v-buttons .item{display:flex;align-items:center;gap:11px;border-radius:4px;padding:9px 10px 9px 9px}
+.v-buttons .ico{width:40px;height:40px;border-radius:3px;font-size:20px}
+.v-buttons h3{font-size:15.5px;padding-right:2px}
+.v-buttons p{display:none}
+
+/* view: TILES */
+.grid.v-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.v-tiles .item{border-radius:4px;padding:22px 20px 20px;display:flex;flex-direction:column;gap:12px;min-height:178px}
+.v-tiles .ico{width:58px;height:58px;border-radius:4px;font-size:28px}
+.v-tiles h3{font-size:17px}
+.v-tiles p{font-size:13.5px;line-height:1.45}
+.v-tiles .pin{position:absolute;top:14px;right:14px}
+
+/* view: LIST */
+.grid.v-list{display:flex;flex-direction:column;gap:10px}
+.v-list .item{display:flex;align-items:center;gap:15px;border-radius:4px;padding:12px 14px}
+.v-list .ico{width:44px;height:44px;border-radius:3px;font-size:22px}
+.v-list .txt{flex:1;min-width:0}
+.v-list h3{font-size:16px}
+.v-list p{font-size:13.5px;margin-top:2px}
+
+.empty{display:none;text-align:center;padding:44px 20px;border:2px dashed var(--line);border-radius:4px;color:var(--muted);font-weight:600}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+footer{text-align:center;color:var(--muted);font-size:13px;font-weight:600;margin-top:18px}
+@media (max-width:520px){.views button{padding:8px 11px;font-size:13px}.v-buttons .item{flex:1 1 100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="brand">
-      <div class="logo">✦</div>
-      <div>
-        <h1>My Workspace</h1>
-        <p class="subtitle">Quick access to your frequently used tools and resources</p>
-      </div>
-    </div>
-    <div class="actions">
-      <button onclick="toggleTheme()" title="Toggle dark mode">◐ Theme</button>
-    </div>
-  </header>
-
-  <div class="toolbar">
-    <div class="search">
-      <span>⌕</span>
-      <input id="search" type="search" placeholder="Search tools..." autocomplete="off">
-    </div>
-    <div class="count" id="count"></div>
+  <div class="top">
+    <div class="brand"><i>✦</i>My Workspace</div>
+    <div class="swatches" id="swatches" role="group" aria-label="Colour theme"></div>
   </div>
 
-  <main class="grid" id="grid">
-    <a class="card" data-name="ARUN Links" href="https://thetoolartist.github.io/my-html-tools/ARUN%20Links.html">
-      <div class="icon">🔗</div><h2>ARUN Links</h2>
-      <p>Quick access to ARUN-related links and resources.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="Customer Internal CRM Draft Replies" href="https://thetoolartist.github.io/my-html-tools/Customer%20Internal%20CRM%20Draft%20Replies.html">
-      <div class="icon">💬</div><h2>CRM Draft Replies</h2>
-      <p>Customer and internal CRM response drafts.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="Excel Links" href="https://thetoolartist.github.io/my-html-tools/Excel%20Links.html">
-      <div class="icon">📊</div><h2>Excel Links</h2>
-      <p>Frequently used Excel links and resources.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="Inventvty Link" href="https://thetoolartist.github.io/my-html-tools/Inventyv%20Link.html">
-      <div class="icon">📦</div><h2>Inventory Links</h2>
-      <p>Quick access to inventory-related resources.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="Notes" href="https://thetoolartist.github.io/my-html-tools/Notes....html">
-      <div class="icon">📝</div><h2>Notes</h2>
-      <p>Your saved notes and useful information.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="Online Useful Tools" href="https://thetoolartist.github.io/my-html-tools/Online%20Useful%20Tools.html">
-      <div class="icon">🛠️</div><h2>Online Useful Tools</h2>
-      <p>A collection of useful online tools and utilities.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="Reminder" href="https://thetoolartist.github.io/my-html-tools/Reminder.html">
-      <div class="icon">⏰</div><h2>Reminder</h2>
-      <p>Keep track of reminders and important tasks.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="TimeStamp" href="https://thetoolartist.github.io/my-html-tools/TimeStamp.html">
-      <div class="icon">🕒</div><h2>TimeStamp</h2>
-      <p>Quickly access your timestamp utility.</p><div class="open">Open →</div>
-    </a>
-    <a class="card" data-name="To Do List" href="https://thetoolartist.github.io/my-html-tools/To%20Do%20List.html">
-      <div class="icon">✅</div><h2>To Do List</h2>
-      <p>Manage your tasks and daily work items.</p><div class="open">Open →</div>
-    </a>
-  </main>
+  <div class="hero">
+    <h1 id="greet">Hello</h1>
+    <p id="date"></p>
+  </div>
 
-  <div class="empty" id="empty">No matching tools found.</div>
-  <footer>My Workspace • Static HTML Dashboard</footer>
+  <div class="bar">
+    <div class="search">
+      <span>⌕</span>
+      <input id="q" type="search" placeholder="Search your tools" autocomplete="off" aria-label="Search tools">
+    </div>
+    <div class="views" role="group" aria-label="Change view">
+      <button data-v="buttons">Buttons</button>
+      <button data-v="tiles">Tiles</button>
+      <button data-v="list">List</button>
+    </div>
+  </div>
+
+  <section id="pinSec" hidden>
+    <h2 class="t">★ Pinned</h2>
+    <div class="grid" id="pinned"></div>
+  </section>
+
+  <section>
+    <h2 class="t">All tools<small id="count"></small></h2>
+    <div class="grid" id="all"></div>
+    <div class="empty" id="empty"><b>No tools match that search</b>Try a shorter word, or clear the search box.</div>
+  </section>
+
+  <footer>Press <b>/</b> to search · <b>Enter</b> opens the first result · tap ☆ to pin a favourite</footer>
 </div>
 
 <script>
-  const search = document.getElementById('search');
-  const cards = [...document.querySelectorAll('.card')];
-  const count = document.getElementById('count');
-  const empty = document.getElementById('empty');
+const BASE = "https://thetoolartist.github.io/my-html-tools/";
+const tools = [
+  {id:"arun",   name:"ARUN Links",         desc:"Quick access to ARUN-related links and resources.", icon:"🔗", c:"#cfe0ff", href:BASE+"ARUN%20Links.html"},
+  {id:"crm",    name:"CRM Draft Replies",  desc:"Customer and internal CRM response drafts.",        icon:"💬", c:"#ffd3e4", href:BASE+"Customer%20Internal%20CRM%20Draft%20Replies.html"},
+  {id:"excel",  name:"Excel Links",        desc:"Frequently used Excel links and resources.",        icon:"📊", c:"#c9f2d8", href:BASE+"Excel%20Links.html"},
+  {id:"inv",    name:"Inventory Links",    desc:"Quick access to inventory-related resources.",      icon:"📦", c:"#ffe4b8", href:BASE+"Inventyv%20Link.html"},
+  {id:"notes",  name:"Notes",              desc:"Your saved notes and useful information.",          icon:"📝", c:"#fff0a8", href:BASE+"Notes....html"},
+  {id:"online", name:"Online Useful Tools",desc:"Handy online tools and utilities in one place.",    icon:"🛠️", c:"#ddd2ff", href:BASE+"Online%20Useful%20Tools.html"},
+  {id:"remind", name:"Reminder",           desc:"Keep track of reminders and important tasks.",      icon:"⏰", c:"#ffd0c7", href:BASE+"Reminder.html"},
+  {id:"time",   name:"TimeStamp",          desc:"Quickly open your timestamp utility.",              icon:"🕒", c:"#c6eaf2", href:BASE+"TimeStamp.html"},
+  {id:"todo",   name:"To Do List",         desc:"Manage your tasks and daily work items.",           icon:"✅", c:"#d3efbf", href:BASE+"To%20Do%20List.html"}
+];
+const themes = [["mint","#0f9d84"],["peach","#f0663c"],["sky","#2f7df6"],["lilac","#7a56e6"]];
 
-  function filterCards() {
-    const q = search.value.toLowerCase().trim();
-    let visible = 0;
-    cards.forEach(card => {
-      const match = card.dataset.name.toLowerCase().includes(q);
-      card.style.display = match ? 'block' : 'none';
-      if (match) visible++;
-    });
-    count.textContent = `${visible} of ${cards.length} tools`;
-    empty.style.display = visible ? 'none' : 'block';
+const $ = id => document.getElementById(id);
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+let pins = store.get("ws2_pins", []);
+let view = store.get("ws2_view", "buttons");
+
+function card(t){
+  const on = pins.includes(t.id);
+  return `<div class="item" style="--c:${t.c}">
+    <a class="main" href="${t.href}" target="_blank" rel="noopener" aria-label="Open ${t.name}"></a>
+    <div class="ico">${t.icon}</div>
+    <div class="txt"><h3>${t.name}</h3><p>${t.desc}</p></div>
+    <button class="pin ${on?"on":""}" data-id="${t.id}" aria-pressed="${on}" aria-label="${on?"Unpin":"Pin"} ${t.name}">${on?"★":"☆"}</button>
+  </div>`;
+}
+
+function render(){
+  const q = $("q").value.toLowerCase().trim();
+  const m = tools.filter(t => (t.name+" "+t.desc).toLowerCase().includes(q));
+  const p = m.filter(t => pins.includes(t.id));
+  ["pinned","all"].forEach(id => $(id).className = "grid v-" + view);
+  $("pinned").innerHTML = p.map(card).join("");
+  $("pinSec").hidden = !p.length;
+  $("all").innerHTML = m.map(card).join("");
+  $("empty").style.display = m.length ? "none" : "block";
+  $("count").textContent = q ? `${m.length} of ${tools.length}` : `${tools.length}`;
+  document.querySelectorAll(".views button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === view));
+}
+
+document.addEventListener("click", e => {
+  const pin = e.target.closest(".pin");
+  if(pin){
+    const id = pin.dataset.id;
+    pins = pins.includes(id) ? pins.filter(x => x !== id) : [...pins, id];
+    store.set("ws2_pins", pins); render(); return;
   }
+  const v = e.target.closest(".views button");
+  if(v){ view = v.dataset.v; store.set("ws2_view", view); render(); }
+});
 
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-    localStorage.setItem('workspaceTheme',
-      document.body.classList.contains('dark') ? 'dark' : 'light');
-  }
+$("q").addEventListener("input", render);
+$("q").addEventListener("keydown", e => {
+  if(e.key === "Enter"){ const a = document.querySelector("#all .item a.main"); if(a) window.open(a.href,"_blank","noopener"); }
+  if(e.key === "Escape"){ $("q").value = ""; render(); $("q").blur(); }
+});
+document.addEventListener("keydown", e => {
+  if(e.key === "/" && document.activeElement !== $("q")){ e.preventDefault(); $("q").focus(); }
+});
 
-  if (localStorage.getItem('workspaceTheme') === 'dark')
-    document.body.classList.add('dark');
+/* themes */
+function setTheme(name){
+  document.documentElement.dataset.theme = name;
+  document.querySelectorAll("#swatches button").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === name));
+  store.set("ws2_theme", name);
+}
+$("swatches").innerHTML = themes.map(([n,c]) =>
+  `<button data-t="${n}" style="background:${c}" aria-label="${n} theme" title="${n}" aria-pressed="false"></button>`).join("");
+$("swatches").addEventListener("click", e => { const b = e.target.closest("button"); if(b) setTheme(b.dataset.t); });
+setTheme(store.get("ws2_theme", "mint"));
 
-  search.addEventListener('input', filterCards);
-  filterCards();
+/* greeting */
+const now = new Date(), h = now.getHours();
+$("greet").textContent = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+$("date").textContent = now.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+render();
 </script>
 </body>
 </html>
